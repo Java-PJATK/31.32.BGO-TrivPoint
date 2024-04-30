@@ -51,58 +51,98 @@ There are no static fields here. Also, there is no constructor defined, but in f
 
 ## Listing 31 BGO-TrivPoint/TrivPoint.java
 
+```java
+// BGO-TrivPoint/TrivPoint.java
+ 
+public class TrivPoint {
+    public int x, y;
 
+    public void translate(int dx,int dy) {
+        x += dx;
+        y += dy;
+    }
 
-The class Main (below) by itself doesn’t serve any purpose — it is just a wrapper for the
-main function which must be defined (with a signature exactly as shown) somewhere
-and is the entry point to any Java application. In main we create an object of type
-TrivPoint; it will contain fields x and y — we could have created several objects of this
-type: each would contain ‘its own’ fields x and y, independent of x and y of any other
-object of the same class. Note the syntax used to create an object: we have to write
-round parentheses, as when calling a function. In parentheses, we can pass arguments
-to a constructor. In our case, there is only the default constructor (by definition, it
-doesn’t take any arguments) created by the compiler, as we haven’t defined any custom
-constructor ourselves. Note that p is not the name of any object; it is the name of
-a separate local reference variable whose value is the address of the object proper
-(which itself is anonymous). In C++ we would call such a variable a pointer; in Java
-it is called a reference (although is has nothing in common with references in C++.)
+    public void scale(int sx,int sy) {
+        x *= sx;
+        y *= sy;
+    }
+
+      // setters
+    public void setX(int x) {
+        this.x = x;     // this required
+    }
+    public void setY(int yy) {
+        y = yy;         // this.y assumed
+    }
+
+      // getters
+    public int getX() {
+        return this.x;
+    }
+    public int getY() {
+        return y;       // this assumed
+    }
+
+      // static
+    public static void infoStatic(TrivPoint p) {
+        System.out.println("[" + p.x + "," + p.y + "]");
+    }
+
+      // non-static
+    public void info() {
+        System.out.println("[" + this.x + "," + y + "]");
+    }
+}
+```
+
+The class `Main` (below) by itself doesn’t serve any purpose — it is just a wrapper for the main function which must be defined (with a signature exactly as shown) somewhere and is the entry point to any Java application.  
+
+In main we create an object of type `TrivPoint`; it will contain fields x and y — we could have created several objects of this type: each would contain ‘its own’ fields x and y, independent of x and y of any other object of the same class. Note the syntax used to create an object: we have to write round parentheses, as when calling a function. 
+
+In parentheses, we can pass arguments to a constructor. In our case, there is only the default constructor (by definition, it doesn’t take any arguments) created by the compiler, as we haven’t defined any custom constructor ourselves. 
+
+Note that p is not the name of any object; it is the name of a separate local reference variable whose value is the address of the object proper (which itself is anonymous).  
+
+In C++ we would call such a variable a pointer; in Java it is called a reference (although is has nothing in common with references in C++.)  
 
 ## Listing 32 BGO-TrivPoint/Main.java
 
+```java
+public class Main {
+    public static void main(String[] args) {
+        TrivPoint p = new TrivPoint();
+        p.x = 1;
+        p.y = 2;
+        p.info();
+        p.setX(3);
+        p.info();
+        System.out.println("x=" + p.getX() + "; " +
+                           "y=" + p.getY());
+        TrivPoint.infoStatic(p);
+        p.infoStatic(p);          // not recommended!
+
+        p.scale(2,3);
+        p.info();
+        p.translate(1,-3);
+        p.info();
+    }
+}
+```
 
 
+Let us briefly explain the difference between static functions and methods (non-static). The method scale seems to have two parameters. However, it’s a method (there is no static keyword in its declaration). This means that it has one additional parameter, not shown in the list of parameters (as it would be, e.g., in Python). This ‘hidden’ parameter is of type TrivPoint, i.e., it is a reference to an object of this type. Therefore, scale has in fact three parameters and hence, invoking it, we have to specify three arguments. Let’s look at its invocation in line 10
 
-Let us briefly explain the difference between static functions and methods (non-
-static). The method scale seems to have two parameters. However, it’s a method
-(there is no static keyword in its declaration). This means that it has one additional
-parameter, not shown in the list of parameters (as it would be, e.g., in Python). This
-‘hidden’ parameter is of type TrivPoint, i.e., it is a reference to an object of this type.
-Therefore, scale has in fact three parameters and hence, invoking it, we have to specify
-three arguments. Let’s look at its invocation in line 10
-p.scale(2, 3);  
+`p.scale(2, 3);`
 
-Two arguments are given explicitly and they correspond to parameters sx and sy of the
-method. What about the third? It will be the reference to the object on which the
-method is invoked, in our case the value of the variable p which holds the reference
-(address) to the object created in line 3. So, conceptually, the invocation is equivalent
-to something like  
+Two arguments are given explicitly and they correspond to parameters sx and sy of the method. What about the third? It will be the reference to the object on which the method is invoked, in our case the value of the variable p which holds the reference (address) to the object created in line 3. So, conceptually, the invocation is equivalent to something like  
 
 ```
 TrivPoint::scale(p, 2, 3);
 ```
 
-Therefore, methods are always called on a specific object (which, of course, must exist).
-The reference to this object is passed (pushed on stack) to the method as one of the
-arguments. Inside the body of a method we can refer to it — but what is its name
-there? As it was not mentioned in the list of parameters, we were not able to give it
-any name. Therefore, the name is fixed once for all and is this.  
+Therefore, methods are always called on a specific object (which, of course, must exist). The reference to this object is passed (pushed on stack) to the method as one of the arguments. Inside the body of a method we can refer to it — but what is its name there? As it was not mentioned in the list of parameters, we were not able to give it any name. Therefore, the name is fixed once for all and is this.  
 
-Now look at the definition of the method scale. We use the name x there. There are
-variables sx and sy declared there, but no x, so compilation should crash. In such situ-
-ation, however, the compiler will automatically add this in front of undeclared variable
-(x in this case) to obtain this.x. But this means ‘field x of the object referenced to
-by this’ — this is exactly the field x in the object the method was invoked on (i.e., the
-one referenced to by p in the main function). The same, of course, applies to y.  
+Now look at the definition of the method scale. We use the name x there. There are variables sx and sy declared there, but no x, so compilation should crash. In such situation, however, the compiler will automatically add this in front of undeclared variable (x in this case) to obtain this.x. But this means ‘field x of the object referenced to by this’ — this is exactly the field x in the object the method was invoked on (i.e., the one referenced to by p in the main function). The same, of course, applies to y.  
 
 The situation is different for static functions. Here, we don’t have any hidden parameters (therefore this doesn’t exist inside static functions). If a static function is to have access to an object of type TrivPoint, the reference to this object must be passed explicitly — as in function infoStatic in our example.
 
