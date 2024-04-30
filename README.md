@@ -7,19 +7,21 @@
 
 ## 8.1 Basic concepts  
 
-In object oriented programming we deal with objects that we can think of as aggregates of some pieces of information together with actions which can be performed on them. 
+In object oriented programming we deal with **objects** that we can think of as aggregates of some pieces of information together with actions which can be performed on them. 
 
-Similar objects (sharing the same type of information and the same actions) are described by the definition of a class which encapsulates properties of all object of this class that will be created in our program. Each object of a class can contain some information in the form of fields — fields have fixed types and names and will be present in any object of the class; of course their values are usually different in different objects. 
+Similar objects (sharing the same type of information and the same actions) are described by the definition of a **class** which encapsulates properties of all object of this class that will be created in our program.  
 
-All these values, which can be subject to modifications during the execution of a program, define current state of an object. Values of fields in an object which are accessible to the user, at least for reading, are sometimes called its attributes.  
+Each object of a class can contain some information in the form of **fields** — fields have fixed types and names and will be present in any object of the class; of course their values are usually different in different objects. 
 
-Actions are represented by functions (called methods) which operate on objects — methods can return information about the state of an object, modify it, etc.  
+All these values, which can be subject to modifications during the execution of a program, define current state of an object. Values of fields in an object which are accessible to the user, at least for reading, are sometimes called its **attributes**.  
 
-They are always invoked on a specific object and have direct access to all fields of this particular object they were invoked on, and also to all fields of any object of the same class.  
+Actions are represented by functions (called **methods**) which operate on objects — methods can return information about the state of an object, modify it, etc.  
+
+They are always invoked on a specific object and have direct access to all fields of this particular object they were invoked on, and also to all fields of _any_ object of the same class.  
 
 Invoking a method on an object is sometimes described as sending a message to this object.  
 
-Fields and methods of a class are collectively called its members, or, strictly speaking, its non-static members; there are also static members: static fields and static functions (methods).
+Fields and methods of a class are collectively called its **members**, or, strictly speaking, its non-static members; there are also static members: static fields and static functions (methods).
 
 ## 8.2 Classes and objects
 
@@ -35,17 +37,17 @@ Classes define new types. A class can contain
 
 Objects (instances) of classes are always created on the heap (in free memory). They are always anonymous — there is no way to give a name to an object.  
 
-It is also not possible to create an object locally on the stack — only references can be local have names. Operator new creates an object and returns a reference (which in C/C++ corresponds to a pointer, i.e., address) to the object created.  
+It is also not possible to create an object locally on the stack — only references can be local have names. Operator `new` creates an object and returns a reference (which in C/C++ corresponds to a pointer, i.e., address) to the object created.  
 
 We can store this reference (address) in a named reference variable. If there are no references to an object left, the object may be removed by the garbage collector sub-process of the JVM (although we don’t know if and when it will happen).  
 
-In the example below, we define a new type (class) TrivPoint, which is supposed to describe points on a plane:  
+In the example below, we define a new type (class) `TrivPoint`, which is supposed to describe points on a plane:  
 
-* x and y are (non-static) fields. Each object of the class will contains two such ints — of course their values may be different for each object (point).
+* `x` and `y` are (non-static) fields. Each object of the class will contains two such `int`s — of course their values may be different for each object (point).
   
-* translate, scale, getX, getY, setX, setY and info are (non-static) methods;  
+* `translate`, `scale`, `getX`, `getY`, `setX`, `setY` and `info` are (non-static) methods;  
 
-* infoStatic is a static function (static method).
+* `infoStatic` is a static function (static method).
 
 There are no static fields here. Also, there is no constructor defined, but in fact there is one, called default constructor, created by the compiler (more about constructors in a moment).
 
@@ -130,7 +132,15 @@ public class Main {
 ```
 
 
-Let us briefly explain the difference between static functions and methods (non-static). The method scale seems to have two parameters. However, it’s a method (there is no static keyword in its declaration). This means that it has one additional parameter, not shown in the list of parameters (as it would be, e.g., in Python). This ‘hidden’ parameter is of type TrivPoint, i.e., it is a reference to an object of this type. Therefore, scale has in fact three parameters and hence, invoking it, we have to specify three arguments. Let’s look at its invocation in line 10
+Let us briefly explain the difference between static functions and methods (non-static).  
+
+The method `scale` seems to have two parameters. However, it’s a `method` (there is no `static` keyword in its declaration). 
+
+This means that it has one additional parameter, not shown in the list of parameters (as it would be, e.g., in Python). 
+
+This ‘hidden’ parameter is of type `TrivPoint`, i.e., it is a reference to an object of this type. 
+
+Therefore, `scale` has in fact three parameters and hence, invoking it, we have to specify three arguments. Let’s look at its invocation in line 10
 
 `p.scale(2, 3);`
 
@@ -140,10 +150,22 @@ Two arguments are given explicitly and they correspond to parameters sx and sy o
 TrivPoint::scale(p, 2, 3);
 ```
 
-Therefore, methods are always called on a specific object (which, of course, must exist). The reference to this object is passed (pushed on stack) to the method as one of the arguments. Inside the body of a method we can refer to it — but what is its name there? As it was not mentioned in the list of parameters, we were not able to give it any name. Therefore, the name is fixed once for all and is this.  
+Therefore, methods are always called on a specific object (which, of course, must exist). 
 
-Now look at the definition of the method scale. We use the name x there. There are variables sx and sy declared there, but no x, so compilation should crash. In such situation, however, the compiler will automatically add this in front of undeclared variable (x in this case) to obtain this.x. But this means ‘field x of the object referenced to by this’ — this is exactly the field x in the object the method was invoked on (i.e., the one referenced to by p in the main function). The same, of course, applies to y.  
+The reference to this object is passed (pushed on stack) to the method as one of the arguments. 
 
-The situation is different for static functions. Here, we don’t have any hidden parameters (therefore this doesn’t exist inside static functions). If a static function is to have access to an object of type TrivPoint, the reference to this object must be passed explicitly — as in function infoStatic in our example.
+Inside the body of a method we can refer to it — but what is its name there? 
+
+As it was not mentioned in the list of parameters, we were not able to give it any name. 
+
+Therefore, the name is fixed once for all and is `this`.  
+
+Now look at the definition of the method `scale`. We use the name `x` there. There are variables `sx` and `sy` declared there, but no `x`, so compilation should crash. 
+
+In such situation, however, the compiler will automatically add `this` in front of undeclared variable (x in this case) to obtain `this.x`. 
+
+But this means ‘field x of the object referenced to by `this`’ — this is exactly the field x in the object the method was invoked on (i.e., the one referenced to by `p` in the `main` function). The same, of course, applies to `y`.  
+
+The situation is different for static functions. Here, we don’t have any hidden parameters (therefore `this` doesn’t exist inside static functions). If a static function is to have access to an object of type `TrivPoint`, the reference to this object must be passed explicitly — as in function `infoStatic` in our example.
 
 More details and more examples will be presented in the following sections.
