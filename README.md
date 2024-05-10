@@ -131,6 +131,7 @@ public class Main {
 }
 ```
 
+### The difference between static functions and non-static methods.
 
 Let us briefly explain the difference between static functions and methods (non-static).  
 
