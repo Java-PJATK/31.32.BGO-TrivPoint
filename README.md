@@ -33,11 +33,11 @@ Classes define new types. A class can contain
 * methods (non-static);  
 * static functions (methods);  
 * static and non-static initializer blocks;  
-* definitions of other classes (the so called inner classes) or enumerations.  
+* definitions of other classes (the so called _inner_ classes) or enumerations.  
 
-Objects (instances) of classes are always created on the heap (in free memory). They are always anonymous — there is no way to give a name to an object.  
+**Objects (instances) of classes are always created on the heap** (in _free memory_). They are always **anonymous** — there is no way to give a name to an object.  
 
-It is also not possible to create an object locally on the stack — only references can be local have names. Operator `new` creates an object and returns a reference (which in C/C++ corresponds to a pointer, i.e., address) to the object created.  
+It is also not possible to create an object locally on the stack — only references can be local have names. Operator `new` creates an object and returns a _reference_ (which in C/C++ corresponds to a pointer, i.e., address) to the object created.  
 
 We can store this reference (address) in a named reference variable. If there are no references to an object left, the object may be removed by the garbage collector sub-process of the JVM (although we don’t know if and when it will happen).  
 
@@ -49,7 +49,7 @@ In the example below, we define a new type (class) `TrivPoint`, which is suppose
 
 * `infoStatic` is a static function (static method).
 
-There are no static fields here. Also, there is no constructor defined, but in fact there is one, called default constructor, created by the compiler (more about constructors in a moment).
+There are no static fields here. Also, there is no constructor defined, but in fact there is one, called _default_ constructor, created by the compiler (more about constructors in a moment).
 
 ## Listing 31 BGO-TrivPoint/TrivPoint.java
 
