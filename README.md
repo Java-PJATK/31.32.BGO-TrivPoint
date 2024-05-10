@@ -137,13 +137,13 @@ Let us briefly explain the difference between static functions and methods (non-
 
 The method `scale` seems to have two parameters. However, it’s a `method` (there is no `static` keyword in its declaration). 
 
-This means that it has one additional parameter, not shown in the list of parameters (as it would be, e.g., in Python). 
+This means that it has one **additional parameter**, **not shown in the list of parameters** (as it would be, e.g., in Python). 
 
 This ‘hidden’ parameter is of type `TrivPoint`, i.e., it is a reference to an object of this type. 
 
-Therefore, `scale` has in fact three parameters and hence, invoking it, we have to specify three arguments. Let’s look at its invocation in line 10
+Therefore, `scale` has in fact _three_ parameters and hence, invoking it, we have to specify three arguments. Let’s look at its invocation in line 10
 
-`p.scale(2, 3);`
+```p.scale(2, 3);```
 
 Two arguments are given explicitly and they correspond to parameters sx and sy of the method. What about the third? It will be the reference to the object on which the method is invoked, in our case the value of the variable p which holds the reference (address) to the object created in line 3. So, conceptually, the invocation is equivalent to something like  
 
