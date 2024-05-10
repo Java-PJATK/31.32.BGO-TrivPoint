@@ -143,7 +143,9 @@ This ‘hidden’ parameter is of type `TrivPoint`, i.e., it is a reference to a
 
 Therefore, `scale` has in fact _three_ parameters and hence, invoking it, we have to specify three arguments. Let’s look at its invocation in line 10
 
-```p.scale(2, 3);```
+```
+p.scale(2, 3);
+```
 
 Two arguments are given explicitly and they correspond to parameters sx and sy of the method. What about the third? It will be the reference to the object on which the method is invoked, in our case the value of the variable p which holds the reference (address) to the object created in line 3. So, conceptually, the invocation is equivalent to something like  
 
